@@ -1,6 +1,7 @@
 import json
 import scraper
 from db import add_offer
+from scrapers.ip_rotate import valid_proxies_ips
 
 with open('jobs.json', 'r+', encoding="utf-8") as file:
     data = json.load(file)
