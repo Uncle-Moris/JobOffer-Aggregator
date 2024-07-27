@@ -1,17 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
 
+ALL_CATEGORIES = [
+    "javascript", "html", "php", "ruby", "python", "java", "net",
+    "scala", "c", "mobile", "testing", "devops", "admin", "ux", "pm", "go",
+    "game", "analytics", "security", "data", "support", "erp", "other"
+    ]
 
-job_title_selector = 'div.MuiBox-root.css-s52zl1 h1'
-skills_list_selector = 'div.MuiBox-root.css-qal8sw ul h4'
-description_selector = 'div.MuiBox-root.css-7nl6k4'
-company_name_selector = 'div.MuiBox-root.css-1730po7'
-level_selector = '.MuiBox-root.css-6ffpw7:nth-of-type(2) .MuiBox-root.css-snbmy4'
-operating_mode_selector = '.MuiBox-root.css-6ffpw7:nth-of-type(4) .MuiBox-root.css-snbmy4'
-salary_selector = 'div.MuiBox-root.css-ntm2tb span'
+
 
 def scrap_offer(url):
-    # Pobranie treści strony
+
     response = requests.get(url)
     html_doc = response.text
     soup = BeautifulSoup(html_doc, 'lxml')
@@ -21,15 +20,15 @@ def scrap_offer(url):
         value = element.text.strip() if element else None
         return value
 
-    job_title = simple_extractor(job_title_selector)
-    company_name = simple_extractor((company_name_selector))
-    skills = [skill.text.strip() for skill in soup.select(skills_list_selector)]
-    description=simple_extractor(description_selector)
-    level = simple_extractor(level_selector)
-    mode = simple_extractor(operating_mode_selector)
-    salary = simple_extractor(salary_selector)
+    job_title = simple_extractor('div.MuiBox-root.css-s52zl1 h1')
+    company_name = simple_extractor('div.MuiBox-root.css-1730po7')
+    skills = [skill.text.strip() for skill in soup.select('div.MuiBox-root.css-qal8sw ul h4')]
+    description=simple_extractor('div.MuiBox-root.css-7nl6k4')
+    level = simple_extractor('.MuiBox-root.css-6ffpw7:nth-of-type(2) .MuiBox-root.css-snbmy4')
+    operating_mode = simple_extractor('.MuiBox-root.css-6ffpw7:nth-of-type(4) .MuiBox-root.css-snbmy4')
+    salary = simple_extractor('div.MuiBox-root.css-ntm2tb span')
 
-    print(f"Title: {job_title}\nCompany: {company_name}\nSkills: {skills}\nDescription: {description}\nLevel: {level}\nMode: {mode}, S{salary}")
+    print(f"Title: {job_title}\nCompany: {company_name}\nSkills: {skills}\nDescription: {description}\nLevel: {level}\nMode: {operating_mode}, S{salary}")
 
 
 def scrap_offers_links(category):
